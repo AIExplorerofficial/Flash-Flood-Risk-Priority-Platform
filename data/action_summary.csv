@@ -1,0 +1,8 @@
+priority,action,n
+P1 Critical,Early-warning siren + rain gauge; evacuation routes and community drills,7
+P1 Critical,Survey channel encroachment; restrict/relocate building in channel margin; rain gauge + siren,64
+P2 High,Early-warning siren + rain gauge; evacuation routes and community drills,11
+P2 High,Survey channel encroachment; restrict/relocate building in channel margin; rain gauge + siren,59
+P3 Watch,Cascade watch: satellite / glacial-lake monitoring (not validated by event data),1192
+P3 Watch,Include in district alert; field survey of channel encroachment,280
+P4 Routine,Routine monitoring,1454
