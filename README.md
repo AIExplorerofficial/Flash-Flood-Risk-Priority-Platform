@@ -127,20 +127,42 @@ PCA was trained across standard hydromorphic features to validate cluster separa
 The platform evaluates hazard and operational priority through continuous percentile formulation:
 
 1. **Morphometric Response Index ($R$):**
-   $$R = \frac{w_1 r(\text{slope\_p90}) + w_2 r(\text{melton}) + w_3 r(\text{drainage\_density}) + w_4 r(\text{inv\_tc\_min})}{\sum_{i=1}^{4} w_i}$$
+   $$
+   R = \frac{w_1 \cdot r(\text{Slope}_{p90}) + w_2 \cdot r(\text{Melton}) + w_3 \cdot r(\text{DrainageDensity}) + w_4 \cdot r(T_c^{-1})}{\sum_{i=1}^{4} w_i}
+   $$
+   Where $r(\cdot)$ denotes the continuous percentile rank $\in [0, 1]$ across all 3,067 micro-catchments:
+   - $r(\text{Slope}_{p90})$: 90th percentile slope gradient (`slope_p90`, default weight $w_1 = 1.0$)
+   - $r(\text{Melton})$: Melton ruggedness number (`melton`, default weight $w_2 = 1.0$)
+   - $r(\text{DrainageDensity})$: Stream channel density (`drainage_density`, default weight $w_3 = 1.0$)
+   - $r(T_c^{-1})$: Inverse time of concentration (`inv_tc_min`, default weight $w_4 = 1.0$)
 
 2. **Rainfall Extreme Index ($P$):**
-   $$P = \frac{w_5 r(\text{p99\_wetday}) + w_6 r(\text{max3d}) + w_7 r(\text{heavy\_days})}{\sum_{i=5}^{7} w_i}$$
+   $$
+   P = \frac{w_5 \cdot r(P_{99}) + w_6 \cdot r(P_{\text{3day}}) + w_7 \cdot r(N_{\text{heavy}})}{\sum_{i=5}^{7} w_i}
+   $$
+   Where:
+   - $r(P_{99})$: 99th percentile wet-day precipitation (`p99_wetday`, default weight $w_5 = 1.0$)
+   - $r(P_{\text{3day}})$: Maximum 3-day rainfall accumulation (`max3d`, default weight $w_6 = 1.0$)
+   - $r(N_{\text{heavy}})$: Count of heavy precipitation days $> 35.5\text{ mm}$ (`heavy_days`, default weight $w_7 = 1.0$)
 
 3. **Composite Hazard Index ($H$):**
-   $$H = \alpha R + (1 - \alpha) P$$
-   *(Baseline operational balance: $\alpha = 0.5$)*
+   $$
+   H = \alpha R + (1 - \alpha) P
+   $$
+   *(Baseline operational balance parameter: $\alpha = 0.5$)*
 
 4. **Exposure Index ($E$):**
-   $$E = \frac{r(\text{pop\_total}) + r(\text{pop\_near\_channel})}{2}$$
+   $$
+   E = \frac{r(\text{Pop}_{\text{total}}) + r(\text{Pop}_{\text{channel}})}{2}
+   $$
+   Where:
+   - $r(\text{Pop}_{\text{total}})$: Total catchment population (`pop_total`)
+   - $r(\text{Pop}_{\text{channel}})$: Population residing within 100 meters of stream channel axis (`pop_near_channel`)
 
 5. **Operational Priority Score ($S$):**
-   $$S = H \cdot E^\gamma$$
+   $$
+   S = H \cdot E^\gamma
+   $$
    *(Baseline non-linear exposure dampener: $\gamma = 1.0$)*
 
 ### 3.4 Classification and Triage Rules
